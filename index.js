@@ -78,14 +78,18 @@ $(document).ready(function () {
             };
 
             document.getElementById("bigRedButton").onclick = function () {
+                console.log("data" + data.length)
+                for (var i = 0; data.length > i; i++) {
+                    document.getElementById("select").remove();
+                    document.getElementById("delete").remove();
+                }
+
                 for (var i = 0; i < data.length; i++) {
                     data.splice(i, 1);
                     i--;
                 }
                 localStorage.setItem('storedData', JSON.stringify(data));
                 console.log(data + "test")
-                createSelectFields();
-                createDeleteFields();
                 console.log(data);
             }
 
@@ -133,7 +137,6 @@ $(document).ready(function () {
                 console.log(data)
 
                 for (var i = 0; i < data.length; i++) {
-
                     option = document.createElement("option");
                     option.value = data[i];
                     option.text = data[i];
@@ -167,7 +170,7 @@ function waitForElm(selector) {
     });
 }
 
-function createDropdown(data, create, update) {
+function createDropdown(data) {
     var select = document.createElement("select");
     select.id = "You're_welcome_Boris";
 
@@ -207,6 +210,7 @@ function deleteValue(data) {
     var option = document.createElement("option");
     option.setAttribute("selected", "");
     option.setAttribute("disabled", "");
+    option.id = "test";
     option.text = "Delete Value";
     deleteSelect.appendChild(option);
     for (var i = 0; i < data.length; i++) {
