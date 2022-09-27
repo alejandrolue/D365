@@ -187,6 +187,7 @@ function waitForElm(selector) {
 }
 
 function createDropdown(data) {
+    //TODO: create Fav's
     var select = document.createElement("select");
     select.id = "You're_welcome_Boris";
 
