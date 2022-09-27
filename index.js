@@ -106,8 +106,24 @@ $(document).ready(function () {
                         data.splice(i, 1);
                         console.log(data)
                         localStorage.setItem('storedData', JSON.stringify(data));
-                        createSelectFields();
-                        createDeleteFields();
+                        for (var i = 0; data.length > i; i++) {
+                            document.getElementById("select").remove();
+                            document.getElementById("delete").remove();
+                        }
+                        for (var i = 0; i < data.length - 1; i++) {
+                            option = document.createElement("option");
+                            option.value = data[i];
+                            option.text = data[i];
+                            option.id = "select"
+                            document.getElementById("You're_welcome_Janes").appendChild(option);
+                        }
+                        for (var i = 0; i < data.length - 1; i++) {
+                            option = document.createElement("option");
+                            option.value = data[i];
+                            option.text = data[i];
+                            option.id = "select"
+                            document.getElementById("You're_welcome_Boris").appendChild(option);
+                        }
                         console.log(data);
                     }
                 }
