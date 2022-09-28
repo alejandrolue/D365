@@ -102,7 +102,7 @@ $(document).ready(function () {
                 localStorage.setItem('storedData', JSON.stringify(data));
                 let deleted = document.getElementById("You're_welcome_Janes")
                 let selected = document.getElementById("You're_welcome_Boris")
-                let defaultDelete = "Delete Value"
+                let defaultDelete = "Delete"
                 let defaultSelect = "Select"
                 for (var i, j = 0; i = deleted.options[j]; j++) {
                     if (i.value == defaultDelete) {
@@ -143,7 +143,7 @@ $(document).ready(function () {
 
                 let deleted = document.getElementById("You're_welcome_Janes")
                 let selected = document.getElementById("You're_welcome_Boris")
-                let defaultDelete = "Delete Value"
+                let defaultDelete = "Delete"
                 let defaultSelect = "Select"
                 for (var i, j = 0; i = deleted.options[j]; j++) {
                     if (i.value == defaultDelete) {
@@ -158,21 +158,50 @@ $(document).ready(function () {
                         break;
                     }
                 }
+                const optSSelect = document.querySelector("#resentsSelect");
+                const optSFav = document.querySelector("#favSelect")
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
-                    option = document.createElement("option");
-                    option.value = dataSplit[0];
-                    option.text = dataSplit[0];
-                    option.id = "delete"
-                    document.getElementById("You're_welcome_Janes").appendChild(option);
+                    let value = parseInt(dataSplit[1]);
+                    if (value < 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "select"
+                        optSSelect.appendChild(option)
+                    }
+                    if (value > 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "select"
+                        optSFav.appendChild(option)
+                    }
                 }
+
+                const optDSelect = document.querySelector("#resentsDelete");
+                const optDFav = document.querySelector("#favDelete")
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
-                    option = document.createElement("option");
-                    option.value = dataSplit[0];
-                    option.text = dataSplit[0];
-                    option.id = "select"
-                    document.getElementById("You're_welcome_Boris").appendChild(option);
+                    let value = parseInt(dataSplit[1]);
+                    if (value < 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "delete"
+                        optDSelect.appendChild(option)
+                    }
+                    if (value > 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "delete"
+                        optDFav.appendChild(option)
+                    }
                 }
             }
 
@@ -180,14 +209,27 @@ $(document).ready(function () {
                 for (var i = 0; data.length - 1 > i; i++) {
                     document.getElementById("select").remove();
                 }
-
+                const optSelect = document.querySelector("#resentsSelect");
+                const optFav = document.querySelector("#favSelect")
                 for (var i = 0; i < data.length; i++) {
-                    let dataSplit = data[i].toString().split(",");
-                    option = document.createElement("option");
-                    option.value = dataSplit[0];
-                    option.text = dataSplit[0];
-                    option.id = "select"
-                    document.getElementById("You're_welcome_Boris").appendChild(option);
+                    let dataSplit = data[i].toString().split(",")
+                    let value = parseInt(dataSplit[1]);
+                    if (value < 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "select"
+                        optSelect.appendChild(option)
+                    }
+                    if (value > 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "select"
+                        optFav.appendChild(option)
+                    }
                 }
             }
 
@@ -196,15 +238,27 @@ $(document).ready(function () {
                     document.getElementById("delete").remove();
                 }
 
-
-
+                const optSelect = document.querySelector("#resentsDelete");
+                const optFav = document.querySelector("#favDelete")
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
-                    option = document.createElement("option");
-                    option.value = dataSplit[0];
-                    option.text = dataSplit[0];
-                    option.id = "delete";
-                    document.getElementById("You're_welcome_Janes").appendChild(option);
+                    let value = parseInt(dataSplit[1]);
+                    if (value < 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "delete"
+                        optSelect.appendChild(option)
+                    }
+                    if (value > 5) {
+                        let dataSplit = data[i].toString().split(",")
+                        option = document.createElement("option");
+                        option.value = dataSplit[0];
+                        option.text = dataSplit[0];
+                        option.id = "delete"
+                        optFav.appendChild(option)
+                    }
                 }
                 //document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(deleteValue(data));
             }
@@ -235,20 +289,51 @@ function createDropdown(data) {
     var select = document.createElement("select");
     select.id = "You're_welcome_Boris";
 
+    var favGroup = document.createElement("optgroup");
+    favGroup.setAttribute("label", "favorites")
+    favGroup.textContent = "favorites";
+    favGroup.id = "favSelect"
+    select.appendChild(favGroup);
+
+
+    for (var i = 0; i < data.length; i++) {
+        let dataSplit = data[i].toString().split(",")
+        let value = parseInt(dataSplit[1]);
+        if (value > 5) {
+            let dataSplit = data[i].toString().split(",")
+            option = document.createElement("option");
+            option.value = dataSplit[0];
+            option.text = dataSplit[0];
+            option.id = "select"
+            favGroup.appendChild(option) ;
+        }
+    }
+
+    var recentGroup = document.createElement("optgroup");
+    recentGroup.setAttribute("label", "resents")
+    recentGroup.textContent = "resents";
+    recentGroup.id = "resentsSelect"
+    select.appendChild(recentGroup);
+
+
     var option = document.createElement("option");
     option.setAttribute("selected", "");
     option.setAttribute("disabled", "");
     option.text = "Select";
 
-    select.appendChild(option);
+    recentGroup.appendChild(option);
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
-        option = document.createElement("option");
-        option.value = dataSplit[0];
-        option.text = dataSplit[0];
-        option.id = "select"
-        select.appendChild(option);
+        let value = parseInt(dataSplit[1]);
+        if (value < 5) {
+            let dataSplit = data[i].toString().split(",")
+            option = document.createElement("option");
+            option.value = dataSplit[0];
+            option.text = dataSplit[0];
+            option.id = "select"
+            select.appendChild(option);
+        }
     }
     return select
 }
@@ -259,9 +344,6 @@ function bigRedButton() {
     button.name = "delete";
     button.id = "bigRedButton";
 
-    button.onclick = function () {
-        alert("Data has been deleted")
-    }
     return button
 }
 
@@ -269,19 +351,51 @@ function deleteValue(data) {
     var deleteSelect = document.createElement("select");
     deleteSelect.id = "You're_welcome_Janes";
 
+    var favGroup = document.createElement("optgroup");
+    favGroup.setAttribute("label", "favorites")
+    favGroup.textContent = "favorites";
+    favGroup.id = "favDelete"
+    deleteSelect.appendChild(favGroup);
+
+
+    for (var i = 0; i < data.length; i++) {
+        let dataSplit = data[i].toString().split(",")
+        let value = parseInt(dataSplit[1]);
+        if (value > 5) {
+            let dataSplit = data[i].toString().split(",")
+            option = document.createElement("option");
+            option.value = dataSplit[0];
+            option.text = dataSplit[0];
+            option.id = "delete"
+            favGroup.appendChild(option) ;
+        }
+    }
+
+    var recentGroup = document.createElement("optgroup");
+    recentGroup.setAttribute("label", "resents")
+    recentGroup.textContent = "resents";
+    recentGroup.id = "resentsDelete"
+    deleteSelect.appendChild(recentGroup);
+
+
     var option = document.createElement("option");
     option.setAttribute("selected", "");
     option.setAttribute("disabled", "");
-    option.id = "test";
-    option.text = "Delete Value";
-    deleteSelect.appendChild(option);
+    option.text = "Delete";
+
+    recentGroup.appendChild(option);
+
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
-        option = document.createElement("option");
-        option.value = dataSplit[0];
-        option.text = dataSplit[0];
-        option.id = "delete"
-        deleteSelect.appendChild(option);
+        let value = parseInt(dataSplit[1]);
+        if (value < 5) {
+            let dataSplit = data[i].toString().split(",")
+            option = document.createElement("option");
+            option.value = dataSplit[0];
+            option.text = dataSplit[0];
+            option.id = "delete"
+            deleteSelect.appendChild(option);
+        }
     }
     return deleteSelect;
 }
