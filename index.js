@@ -53,7 +53,13 @@ $(document).ready(function () {
                     if (matches != true) {
                         data.push([short, 0]);
                         if (data.length > 11) {
-                            data.splice(0, 1);
+                            for (var i = 0; i < data.length; i++) {
+                                let dataSplit = data[i].toString().split(",")
+                                if (dataSplit[1] < 5) {
+                                    data.splice(i, 1);
+                                    break;
+                                }
+                            }
                             localStorage.setItem('storedData', JSON.stringify(data));
                             createSelectFields();
                             createDeleteFields();
@@ -75,10 +81,8 @@ $(document).ready(function () {
                 onSelect();
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
-                    console.log(dataSplit + "datasplit")
                     if (dataSplit[0] === getValue()) {
                         let levelUp = parseInt(dataSplit[1]) + 1;
-                        console.log(levelUp + "lvlUp ")
                         data[i] = [dataSplit[0], levelUp];
                         localStorage.setItem('storedData', JSON.stringify(data));
                     }
