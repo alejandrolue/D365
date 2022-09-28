@@ -50,7 +50,7 @@ $(document).ready(function () {
                     })
 
                     if (matches != true) {
-                        data.push(short);
+                        data.push([short, 0]);
                         if (data.length > 11) {
                             data.splice(0, 1);
                             localStorage.setItem('storedData', JSON.stringify(data));
@@ -154,7 +154,6 @@ $(document).ready(function () {
                     }
                 }
                 console.log(data.length + " hello")
-
                 for (var i = 0; i < data.length; i++) {
                     option = document.createElement("option");
                     option.value = data[i];
@@ -180,9 +179,11 @@ $(document).ready(function () {
                 }
 
                 for (var i = 0; i < data.length; i++) {
+                    let dataSplit = data[i].toString().split(",")
+                    console.log(dataSplit)
                     option = document.createElement("option");
-                    option.value = data[i];
-                    option.text = data[i];
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
                     option.id = "select"
                     document.getElementById("You're_welcome_Boris").appendChild(option);
                 }
@@ -198,9 +199,10 @@ $(document).ready(function () {
                 console.log(data)
 
                 for (var i = 0; i < data.length; i++) {
+                    let dataSplit = data[i].toString().split(",")
                     option = document.createElement("option");
-                    option.value = data[i];
-                    option.text = data[i];
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
                     option.id = "delete";
                     console.log(i)
                     document.getElementById("You're_welcome_Janes").appendChild(option);
@@ -242,9 +244,10 @@ function createDropdown(data) {
     select.appendChild(option);
 
     for (var i = 0; i < data.length; i++) {
+        let dataSplit = data[i].toString().split(",")
         option = document.createElement("option");
-        option.value = data[i];
-        option.text = data[i];
+        option.value = dataSplit[0];
+        option.text = dataSplit[0];
         option.id = "select"
         select.appendChild(option);
     }
@@ -274,9 +277,10 @@ function deleteValue(data) {
     option.text = "Delete Value";
     deleteSelect.appendChild(option);
     for (var i = 0; i < data.length; i++) {
+        let dataSplit = data[i].toString().split(",")
         option = document.createElement("option");
-        option.value = data[i];
-        option.text = data[i];
+        option.value = dataSplit[0];
+        option.text = dataSplit[0];
         option.id = "delete"
         deleteSelect.appendChild(option);
     }
