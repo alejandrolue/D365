@@ -73,18 +73,18 @@ $(document).ready(function () {
 
             document.getElementById("You're_welcome_Boris").onchange = function () {
                 onSelect();
-                console.log("in tha function")
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
+                    console.log(dataSplit + "datasplit")
                     if (dataSplit[0] === getValue()) {
-                        let levelUp = dataSplit[1] + 1;
-                        data.push(dataSplit[0], levelUp);
+                        let levelUp = parseInt(dataSplit[1]) + 1;
+                        console.log(levelUp + "lvlUp ")
+                        data[i] = [dataSplit[0], levelUp];
                         localStorage.setItem('storedData', JSON.stringify(data));
-
                     }
                 }
+            }
 
-            };
             document.getElementById("You're_welcome_Janes").onchange = function () {
                 onDeleteSelect()
             };
