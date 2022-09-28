@@ -89,6 +89,24 @@ $(document).ready(function () {
                     i--;
                 }
                 localStorage.setItem('storedData', JSON.stringify(data));
+                let deleted = document.getElementById("You're_welcome_Janes")
+                let selected = document.getElementById("You're_welcome_Boris")
+                console.log(deleted);
+                let defaultDelete = "Delete Value"
+                let defaultSelect = "Select"
+                for (var i, j = 0; i = deleted.options[j]; j++) {
+                    if (i.value == defaultDelete) {
+                        deleted.selectedIndex = j;
+                        break;
+                    }
+                }
+
+                for (var i, j = 0; i = selected.options[j]; j++) {
+                    if (i.value == defaultSelect) {
+                        selected.selectedIndex = j;
+                        break;
+                    }
+                }
                 console.log(data + "test")
                 console.log(data);
             }
@@ -99,34 +117,61 @@ $(document).ready(function () {
 
             function onDelete() {
                 let value = document.getElementById("You're_welcome_Janes").value;
-                console.log(value + "v");
-                console.log(data + "d")
+                for (var i = 0; data.length > i; i++) {
+                    document.getElementById("select").remove();
+                }
+                for (var i = 0; data.length > i; i++) {
+                    document.getElementById("delete").remove();
+                }
+
+                console.log(value + "value");
                 for (var i = 0; i < data.length; i++) {
                     if (data[i] === value) {
+                        console.log(data[i] + "data test")
                         data.splice(i, 1);
                         console.log(data)
                         localStorage.setItem('storedData', JSON.stringify(data));
-                        for (var i = 0; data.length > i; i++) {
-                            document.getElementById("select").remove();
-                            document.getElementById("delete").remove();
-                        }
-                        for (var i = 0; i < data.length - 1; i++) {
-                            option = document.createElement("option");
-                            option.value = data[i];
-                            option.text = data[i];
-                            option.id = "select"
-                            document.getElementById("You're_welcome_Janes").appendChild(option);
-                        }
-                        for (var i = 0; i < data.length - 1; i++) {
-                            option = document.createElement("option");
-                            option.value = data[i];
-                            option.text = data[i];
-                            option.id = "select"
-                            document.getElementById("You're_welcome_Boris").appendChild(option);
-                        }
-                        console.log(data);
+
                     }
                 }
+
+                let deleted = document.getElementById("You're_welcome_Janes")
+                let selected = document.getElementById("You're_welcome_Boris")
+                console.log(deleted);
+                let defaultDelete = "Delete Value"
+                let defaultSelect = "Select"
+                for (var i, j = 0; i = deleted.options[j]; j++) {
+                    if (i.value == defaultDelete) {
+                        deleted.selectedIndex = j;
+                        break;
+                    }
+                }
+
+                for (var i, j = 0; i = selected.options[j]; j++) {
+                    if (i.value == defaultSelect) {
+                        selected.selectedIndex = j;
+                        break;
+                    }
+                }
+                console.log(data.length + " hello")
+
+                for (var i = 0; i < data.length; i++) {
+                    option = document.createElement("option");
+                    option.value = data[i];
+                    option.text = data[i];
+                    option.id = "delete"
+                    document.getElementById("You're_welcome_Janes").appendChild(option);
+                }
+                for (var i = 0; i < data.length; i++) {
+                    option = document.createElement("option");
+                    option.value = data[i];
+                    option.text = data[i];
+                    option.id = "select"
+                    document.getElementById("You're_welcome_Boris").appendChild(option);
+                }
+                console.log(data);
+
+
             }
 
             function createSelectFields() {
@@ -146,7 +191,7 @@ $(document).ready(function () {
             function createDeleteFields() {
                 console.log("delete");
 
-                for (var i = 0; data.length - 1  > i; i++) {
+                for (var i = 0; data.length - 1 > i; i++) {
                     document.getElementById("delete").remove();
                 }
 
@@ -180,14 +225,12 @@ function waitForElm(selector) {
         });
 
         observer.observe(document.body, {
-            childList: true,
-            subtree: true
+            childList: true, subtree: true
         });
     });
 }
 
 function createDropdown(data) {
-    //TODO: create Fav's
     var select = document.createElement("select");
     select.id = "You're_welcome_Boris";
 
