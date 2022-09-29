@@ -52,9 +52,11 @@ $(document).ready(function () {
 
                     if (matches != true) {
                         data.push([short, 0]);
+                        data.sort(function (a, b) {return a[1] - b[1]})
                         if (data.length > 11) {
                             for (var i = 0; i < data.length; i++) {
                                 let dataSplit = data[i].toString().split(",")
+                                dataSplit.sort(function (a, b) {return b[1] - a[1]})
                                 if (dataSplit[1] < 5) {
                                     data.splice(i, 1);
                                     break;
@@ -74,6 +76,14 @@ $(document).ready(function () {
 
                 document.getElementById("You're_welcome_Boris").onchange = function () {
                     onSelect()
+                    for (var i = 0; i < data.length; i++) {
+                        let dataSplit = data[i].toString().split(",")
+                        if (dataSplit[0] === getValue()) {
+                            let levelUp = parseInt(dataSplit[1]) + 1;
+                            data[i] = [dataSplit[0], levelUp];
+                            localStorage.setItem('storedData', JSON.stringify(data));
+                        }
+                    }
                 };
             };
 
@@ -128,6 +138,7 @@ $(document).ready(function () {
             }
 
             function onDelete() {
+
                 let value = document.getElementById("You're_welcome_Janes").value;
                 for (var i = 0; data.length > i; i++) {
                     document.getElementById("select").remove();
@@ -149,6 +160,7 @@ $(document).ready(function () {
                 let selected = document.getElementById("You're_welcome_Boris")
                 let defaultDelete = "Delete"
                 let defaultSelect = "Select"
+                data.sort(function (a, b) {return b[1] - a[1]})
                 for (var i, j = 0; i = deleted.options[j]; j++) {
                     if (i.value == defaultDelete) {
                         deleted.selectedIndex = j;
@@ -167,8 +179,9 @@ $(document).ready(function () {
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
                     let value = parseInt(dataSplit[1]);
-                    if (value < 5) {
+                    if (value <= 5) {
                         let dataSplit = data[i].toString().split(",")
+                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
                         option = document.createElement("option");
                         option.value = dataSplit[0];
                         option.text = dataSplit[0];
@@ -177,6 +190,7 @@ $(document).ready(function () {
                     }
                     if (value > 5) {
                         let dataSplit = data[i].toString().split(",")
+                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
                         option = document.createElement("option");
                         option.value = dataSplit[0];
                         option.text = dataSplit[0];
@@ -190,8 +204,9 @@ $(document).ready(function () {
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
                     let value = parseInt(dataSplit[1]);
-                    if (value < 5) {
+                    if (value <= 5) {
                         let dataSplit = data[i].toString().split(",")
+                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
                         option = document.createElement("option");
                         option.value = dataSplit[0];
                         option.text = dataSplit[0];
@@ -200,6 +215,7 @@ $(document).ready(function () {
                     }
                     if (value > 5) {
                         let dataSplit = data[i].toString().split(",")
+                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
                         option = document.createElement("option");
                         option.value = dataSplit[0];
                         option.text = dataSplit[0];
@@ -215,10 +231,12 @@ $(document).ready(function () {
                 }
                 const optSelect = document.querySelector("#resentsSelect");
                 const optFav = document.querySelector("#favSelect")
+                data.sort(function (a, b) {return b[1] - a[1]})
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
+                    dataSplit.sort(function (a, b) {return a[1] - b[1]})
                     let value = parseInt(dataSplit[1]);
-                    if (value < 5) {
+                    if (value <= 5) {
                         let dataSplit = data[i].toString().split(",")
                         option = document.createElement("option");
                         option.value = dataSplit[0];
@@ -241,13 +259,14 @@ $(document).ready(function () {
                 for (var i = 0; data.length - 1 > i; i++) {
                     document.getElementById("delete").remove();
                 }
-
+                data.sort(function (a, b) {return b[1] - a[1]})
                 const optSelect = document.querySelector("#resentsDelete");
                 const optFav = document.querySelector("#favDelete")
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
+                    dataSplit.sort(function (a, b) {return a[1] - b[1]})
                     let value = parseInt(dataSplit[1]);
-                    if (value < 5) {
+                    if (value <= 5) {
                         let dataSplit = data[i].toString().split(",")
                         option = document.createElement("option");
                         option.value = dataSplit[0];
@@ -299,9 +318,11 @@ function createDropdown(data) {
     favGroup.id = "favSelect"
     select.appendChild(favGroup);
 
-
+    data.sort(function (a, b) {return b[1] - a[1]})
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
+        let dataSplit = data[i].toString().split(",");
+        dataSplit.sort(function (a, b) {return a - b})
+        console.log(dataSplit);
         let value = parseInt(dataSplit[1]);
         if (value > 5) {
             let dataSplit = data[i].toString().split(",")
@@ -329,8 +350,9 @@ function createDropdown(data) {
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
+        dataSplit.sort(function (a, b) {return a[1] - b[1]})
         let value = parseInt(dataSplit[1]);
-        if (value < 5) {
+        if (value <= 5) {
             let dataSplit = data[i].toString().split(",")
             option = document.createElement("option");
             option.value = dataSplit[0];
@@ -360,10 +382,11 @@ function deleteValue(data) {
     favGroup.textContent = "favorites";
     favGroup.id = "favDelete"
     deleteSelect.appendChild(favGroup);
-
+    data.sort(function (a, b) {return b[1] - a[1]})
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
+        dataSplit.sort(function (a, b) {return a[1] - b[1]})
         let value = parseInt(dataSplit[1]);
         if (value > 5) {
             let dataSplit = data[i].toString().split(",")
@@ -391,8 +414,9 @@ function deleteValue(data) {
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
+        dataSplit.sort(function (a, b) {return a[1] - b[1]})
         let value = parseInt(dataSplit[1]);
-        if (value < 5) {
+        if (value <= 5) {
             let dataSplit = data[i].toString().split(",")
             option = document.createElement("option");
             option.value = dataSplit[0];
