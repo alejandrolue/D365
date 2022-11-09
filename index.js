@@ -1,94 +1,91 @@
 // ==UserScript==
 // @name        D365 Script Merkle
 // @namespace   Violentmonkey Scripts
-// @match       https://dand365prod.operations.dynamics.com/?cmp=CH09&mi=TSTimesheetEntryGridViewMyTimesheets
+// @match       https://dand365prod.operations.dynamics.com/*
 // @grant       none
-// @version     1.2
+// @version     1.3
 // @author      Alejandro Lüthi
 // @require https://code.jquery.com/jquery-3.2.1.min.js
 // @require http://userscripts-mirror.org/scripts/source/107941.user.js
-// @grant GM_setValue
-// @grant GM_getValue
 // @description 14/09/2022, 14:34:12
 // ==/UserScript==
+$(document).ready(function (elementId) {
+    waitForElm("#PMBITSTimesheetCreate_2_CreateFromFavorites_toggle").then((elm) => {
+        const trigger = (el, etype, custom) => {
+            const evt = custom ?? new Event(etype, {bubbles: true});
+            el.dispatchEvent(evt);
+        }
+        trigger(document.getElementById("PMBITSTimesheetCreate_2_CreateFromFavorites_toggle"), 'click');
+    })
+})
 
 $(document).ready(function () {
-    $(document).on("click", "#TSTimesheetTable_TimesheetNbr_GridView_3_0_0_input", function () {
-        waitForElm(".multilineInput-textArea").then((elm) => {
+    waitForElm(".multilineInput-textArea").then((elm) => {
 
-            var state = localStorage.getItem('storedData');
-            let data = [];
-            if (state) {
-                data = [...JSON.parse(state)];
+        var state = localStorage.getItem('storedData');
+        let data = [];
+        if (state) {
+            data = [...JSON.parse(state)];
+        } else {
+            console.log("");
+        }
+
+        document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(createDropdown(data));
+
+        document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(deleteValue(data));
+
+        document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(bigRedButton(data));
+
+        document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
+            getValue()
+        };
+
+        document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
+            if (getValue() === "") {
+                console.log("is empty");
             } else {
-                console.log("");
+                let value = getValue();
+                let res = value.replace(/^[ ]+/g, "");
+                let short = res.replace(/[ ]+$/g, "");
+                console.log(short)
+                let matches = false;
+                data.forEach(store => {
+                    let splitStore = store.toString().split(",")
+                    if (splitStore[0] === short) {
+                        matches = true;
+                    }
+                })
+
+                if (matches != true) {
+                    data.push([short, 0]);
+                    data.sort(function (a, b) {
+                        return a[1] - b[1]
+                    })
+                    if (data.length > 11) {
+                        for (var i = 0; i < data.length; i++) {
+                            let dataSplit = data[i].toString().split(",")
+                            dataSplit.sort(function (a, b) {
+                                return b[1] - a[1]
+                            })
+                            if (dataSplit[1] < 5) {
+                                data.splice(i, 1);
+                                break;
+                            }
+                        }
+                        localStorage.setItem('storedData', JSON.stringify(data));
+                        createSelectFields();
+                        createDeleteFields();
+                    } else {
+                        localStorage.setItem('storedData', JSON.stringify(data));
+                        createSelectFields();
+                        createDeleteFields();
+                    }
+                }
+                matches = false;
             }
 
-            document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(createDropdown(data));
-
-            document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(deleteValue(data));
-
-            document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(bigRedButton(data));
-
-            document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
-                getValue()
-            };
-
-            document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
-                if (getValue() === "") {
-                    console.log("is empty");
-                } else {
-                    let value = getValue();
-                    let res = value.replace(/^[ ]+/g, "");
-                    let short = res.replace(/[ ]+$/g, "");
-                    console.log(short)
-                    let matches = false;
-                    data.forEach(store => {
-                        let splitStore = store.toString().split(",")
-                        if (splitStore[0] === short) {
-                            matches = true;
-                        }
-                    })
-
-                    if (matches != true) {
-                        data.push([short, 0]);
-                        data.sort(function (a, b) {return a[1] - b[1]})
-                        if (data.length > 11) {
-                            for (var i = 0; i < data.length; i++) {
-                                let dataSplit = data[i].toString().split(",")
-                                dataSplit.sort(function (a, b) {return b[1] - a[1]})
-                                if (dataSplit[1] < 5) {
-                                    data.splice(i, 1);
-                                    break;
-                                }
-                            }
-                            localStorage.setItem('storedData', JSON.stringify(data));
-                            createSelectFields();
-                            createDeleteFields();
-                        } else {
-                            localStorage.setItem('storedData', JSON.stringify(data));
-                            createSelectFields();
-                            createDeleteFields();
-                        }
-                    }
-                    matches = false;
-                }
-
-                document.getElementById("You're_welcome_Boris").onchange = function () {
-                    onSelect()
-                    for (var i = 0; i < data.length; i++) {
-                        let dataSplit = data[i].toString().split(",")
-                        if (dataSplit[0] === getValue()) {
-                            let levelUp = parseInt(dataSplit[1]) + 1;
-                            data[i] = [dataSplit[0], levelUp];
-                            localStorage.setItem('storedData', JSON.stringify(data));
-                        }
-                    }
-                };
-            };
-
-            document.getElementById("You're_welcome_Boris").onchange = function () {
-                onSelect();
+            document.getElementById("Youre_welcome_Boris").onchange = function () {
+                onSelect()
                 for (var i = 0; i < data.length; i++) {
                     let dataSplit = data[i].toString().split(",")
                     if (dataSplit[0] === getValue()) {
@@ -97,196 +94,229 @@ $(document).ready(function () {
                         localStorage.setItem('storedData', JSON.stringify(data));
                     }
                 }
-            }
-
-            document.getElementById("You're_welcome_Janes").onchange = function () {
-                onDeleteSelect()
             };
+        };
 
-            document.getElementById("bigRedButton").onclick = function () {
-                for (var i = 0; data.length > i; i++) {
-                    document.getElementById("select").remove();
-                    document.getElementById("delete").remove();
+        document.getElementById("Youre_welcome_Boris").onchange = function () {
+            onSelect();
+            for (var i = 0; i < data.length; i++) {
+                let dataSplit = data[i].toString().split(",")
+                if (dataSplit[0] === getValue()) {
+                    let levelUp = parseInt(dataSplit[1]) + 1;
+                    data[i] = [dataSplit[0], levelUp];
+                    localStorage.setItem('storedData', JSON.stringify(data));
                 }
+            }
+            $("#Youre_welcome_Boris").on('blur', (e) => (e.target.value = 'Select'));
+        }
 
-                for (var i = 0; i < data.length; i++) {
+
+
+        document.getElementById("You're_welcome_Janes").onchange = function () {
+            onDeleteSelect()
+        };
+
+        document.getElementById("bigRedButton").onclick = function () {
+            for (var i = 0; data.length > i; i++) {
+                document.getElementById("select").remove();
+                document.getElementById("delete").remove();
+            }
+
+            for (var i = 0; i < data.length; i++) {
+                data.splice(i, 1);
+                i--;
+            }
+            localStorage.setItem('storedData', JSON.stringify(data));
+            let deleted = document.getElementById("Youre_welcome_Janes")
+            let selected = document.getElementById("Youre_welcome_Boris")
+            let defaultDelete = "Delete"
+            let defaultSelect = "Select"
+            for (var i, j = 0; i = deleted.options[j]; j++) {
+                if (i.value == defaultDelete) {
+                    deleted.selectedIndex = j;
+                    break;
+                }
+            }
+
+            for (var i, j = 0; i = selected.options[j]; j++) {
+                if (i.value == defaultSelect) {
+                    selected.selectedIndex = j;
+                    break;
+                }
+            }
+        }
+
+        document.getElementById("You're_welcome_Janes").onchange = function () {
+            onDelete();
+        }
+
+        function onDelete() {
+
+            let value = document.getElementById("You're_welcome_Janes").value;
+            for (var i = 0; data.length > i; i++) {
+                document.getElementById("select").remove();
+            }
+            for (var i = 0; data.length > i; i++) {
+                document.getElementById("delete").remove();
+            }
+
+            for (var i = 0; i < data.length; i++) {
+                let dataSplit = data[i].toString().split(",")
+                if (dataSplit[0] === value) {
                     data.splice(i, 1);
-                    i--;
-                }
-                localStorage.setItem('storedData', JSON.stringify(data));
-                let deleted = document.getElementById("You're_welcome_Janes")
-                let selected = document.getElementById("You're_welcome_Boris")
-                let defaultDelete = "Delete"
-                let defaultSelect = "Select"
-                for (var i, j = 0; i = deleted.options[j]; j++) {
-                    if (i.value == defaultDelete) {
-                        deleted.selectedIndex = j;
-                        break;
-                    }
-                }
+                    localStorage.setItem('storedData', JSON.stringify(data));
 
-                for (var i, j = 0; i = selected.options[j]; j++) {
-                    if (i.value == defaultSelect) {
-                        selected.selectedIndex = j;
-                        break;
-                    }
                 }
             }
 
-            document.getElementById("You're_welcome_Janes").onchange = function () {
-                onDelete();
-            }
-
-            function onDelete() {
-
-                let value = document.getElementById("You're_welcome_Janes").value;
-                for (var i = 0; data.length > i; i++) {
-                    document.getElementById("select").remove();
-                }
-                for (var i = 0; data.length > i; i++) {
-                    document.getElementById("delete").remove();
-                }
-
-                for (var i = 0; i < data.length; i++) {
-                    let dataSplit = data[i].toString().split(",")
-                    if (dataSplit[0] === value) {
-                        data.splice(i, 1);
-                        localStorage.setItem('storedData', JSON.stringify(data));
-
-                    }
-                }
-
-                let deleted = document.getElementById("You're_welcome_Janes")
-                let selected = document.getElementById("You're_welcome_Boris")
-                let defaultDelete = "Delete"
-                let defaultSelect = "Select"
-                data.sort(function (a, b) {return b[1] - a[1]})
-                for (var i, j = 0; i = deleted.options[j]; j++) {
-                    if (i.value == defaultDelete) {
-                        deleted.selectedIndex = j;
-                        break;
-                    }
-                }
-
-                for (var i, j = 0; i = selected.options[j]; j++) {
-                    if (i.value == defaultSelect) {
-                        selected.selectedIndex = j;
-                        break;
-                    }
-                }
-                const optSSelect = document.querySelector("#resentsSelect");
-                const optSFav = document.querySelector("#favSelect")
-                for (var i = 0; i < data.length; i++) {
-                    let dataSplit = data[i].toString().split(",")
-                    let value = parseInt(dataSplit[1]);
-                    if (value <= 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "select"
-                        optSSelect.appendChild(option)
-                    }
-                    if (value > 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "select"
-                        optSFav.appendChild(option)
-                    }
-                }
-
-                const optDSelect = document.querySelector("#resentsDelete");
-                const optDFav = document.querySelector("#favDelete")
-                for (var i = 0; i < data.length; i++) {
-                    let dataSplit = data[i].toString().split(",")
-                    let value = parseInt(dataSplit[1]);
-                    if (value <= 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "delete"
-                        optDSelect.appendChild(option)
-                    }
-                    if (value > 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        dataSplit.sort(function (a, b) {return a[1] - b[1]})
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "delete"
-                        optDFav.appendChild(option)
-                    }
+            let deleted = document.getElementById("Youre_welcome_Janes")
+            let selected = document.getElementById("Youre_welcome_Boris")
+            let defaultDelete = "Delete"
+            let defaultSelect = "Select"
+            data.sort(function (a, b) {
+                return b[1] - a[1]
+            })
+            for (var i, j = 0; i = deleted.options[j]; j++) {
+                if (i.value == defaultDelete) {
+                    deleted.selectedIndex = j;
+                    break;
                 }
             }
 
-            function createSelectFields() {
-                for (var i = 0; data.length - 1 > i; i++) {
-                    document.getElementById("select").remove();
+            for (var i, j = 0; i = selected.options[j]; j++) {
+                if (i.value == defaultSelect) {
+                    selected.selectedIndex = j;
+                    break;
                 }
-                const optSelect = document.querySelector("#resentsSelect");
-                const optFav = document.querySelector("#favSelect")
-                data.sort(function (a, b) {return b[1] - a[1]})
-                for (var i = 0; i < data.length; i++) {
+            }
+            const optSSelect = document.querySelector("#resentsSelect");
+            const optSFav = document.querySelector("#favSelect")
+            for (var i = 0; i < data.length; i++) {
+                let dataSplit = data[i].toString().split(",")
+                let value = parseInt(dataSplit[1]);
+                if (value <= 5) {
                     let dataSplit = data[i].toString().split(",")
-                    dataSplit.sort(function (a, b) {return a[1] - b[1]})
-                    let value = parseInt(dataSplit[1]);
-                    if (value <= 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "select"
-                        optSelect.appendChild(option)
-                    }
-                    if (value > 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "select"
-                        optFav.appendChild(option)
-                    }
+                    dataSplit.sort(function (a, b) {
+                        return a[1] - b[1]
+                    })
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "select"
+                    optSSelect.appendChild(option)
+                }
+                if (value > 5) {
+                    let dataSplit = data[i].toString().split(",")
+                    dataSplit.sort(function (a, b) {
+                        return a[1] - b[1]
+                    })
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "select"
+                    optSFav.appendChild(option)
                 }
             }
 
-            function createDeleteFields() {
-                for (var i = 0; data.length - 1 > i; i++) {
-                    document.getElementById("delete").remove();
-                }
-                data.sort(function (a, b) {return b[1] - a[1]})
-                const optSelect = document.querySelector("#resentsDelete");
-                const optFav = document.querySelector("#favDelete")
-                for (var i = 0; i < data.length; i++) {
+            const optDSelect = document.querySelector("#resentsDelete");
+            const optDFav = document.querySelector("#favDelete")
+            for (var i = 0; i < data.length; i++) {
+                let dataSplit = data[i].toString().split(",")
+                let value = parseInt(dataSplit[1]);
+                if (value <= 5) {
                     let dataSplit = data[i].toString().split(",")
-                    dataSplit.sort(function (a, b) {return a[1] - b[1]})
-                    let value = parseInt(dataSplit[1]);
-                    if (value <= 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "delete"
-                        optSelect.appendChild(option)
-                    }
-                    if (value > 5) {
-                        let dataSplit = data[i].toString().split(",")
-                        option = document.createElement("option");
-                        option.value = dataSplit[0];
-                        option.text = dataSplit[0];
-                        option.id = "delete"
-                        optFav.appendChild(option)
-                    }
+                    dataSplit.sort(function (a, b) {
+                        return a[1] - b[1]
+                    })
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "delete"
+                    optDSelect.appendChild(option)
                 }
-                //document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(deleteValue(data));
+                if (value > 5) {
+                    let dataSplit = data[i].toString().split(",")
+                    dataSplit.sort(function (a, b) {
+                        return a[1] - b[1]
+                    })
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "delete"
+                    optDFav.appendChild(option)
+                }
             }
-        })
-    });
+        }
+
+        function createSelectFields() {
+            for (var i = 0; data.length - 1 > i; i++) {
+                document.getElementById("select").remove();
+            }
+            const optSelect = document.querySelector("#resentsSelect");
+            const optFav = document.querySelector("#favSelect")
+            data.sort(function (a, b) {
+                return b[1] - a[1]
+            })
+            for (var i = 0; i < data.length; i++) {
+                let dataSplit = data[i].toString().split(",")
+                dataSplit.sort(function (a, b) {
+                    return a[1] - b[1]
+                })
+                let value = parseInt(dataSplit[1]);
+                if (value <= 5) {
+                    let dataSplit = data[i].toString().split(",")
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "select"
+                    optSelect.appendChild(option)
+                }
+                if (value > 5) {
+                    let dataSplit = data[i].toString().split(",")
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "select"
+                    optFav.appendChild(option)
+                }
+            }
+        }
+
+        function createDeleteFields() {
+            for (var i = 0; data.length - 1 > i; i++) {
+                document.getElementById("delete").remove();
+            }
+            data.sort(function (a, b) {
+                return b[1] - a[1]
+            })
+            const optSelect = document.querySelector("#resentsDelete");
+            const optFav = document.querySelector("#favDelete")
+            for (var i = 0; i < data.length; i++) {
+                let dataSplit = data[i].toString().split(",")
+                dataSplit.sort(function (a, b) {
+                    return a[1] - b[1]
+                })
+                let value = parseInt(dataSplit[1]);
+                if (value <= 5) {
+                    let dataSplit = data[i].toString().split(",")
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "delete"
+                    optSelect.appendChild(option)
+                }
+                if (value > 5) {
+                    let dataSplit = data[i].toString().split(",")
+                    option = document.createElement("option");
+                    option.value = dataSplit[0];
+                    option.text = dataSplit[0];
+                    option.id = "delete"
+                    optFav.appendChild(option)
+                }
+            }
+            //document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(deleteValue(data));
+        }
+    })
 });
 
 function waitForElm(selector) {
@@ -310,7 +340,7 @@ function waitForElm(selector) {
 
 function createDropdown(data) {
     var select = document.createElement("select");
-    select.id = "You're_welcome_Boris";
+    select.id = "Youre_welcome_Boris";
 
     var favGroup = document.createElement("optgroup");
     favGroup.setAttribute("label", "favorites")
@@ -318,10 +348,14 @@ function createDropdown(data) {
     favGroup.id = "favSelect"
     select.appendChild(favGroup);
 
-    data.sort(function (a, b) {return b[1] - a[1]})
+    data.sort(function (a, b) {
+        return b[1] - a[1]
+    })
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",");
-        dataSplit.sort(function (a, b) {return a - b})
+        dataSplit.sort(function (a, b) {
+            return a - b
+        })
         console.log(dataSplit);
         let value = parseInt(dataSplit[1]);
         if (value > 5) {
@@ -330,7 +364,7 @@ function createDropdown(data) {
             option.value = dataSplit[0];
             option.text = dataSplit[0];
             option.id = "select"
-            favGroup.appendChild(option) ;
+            favGroup.appendChild(option);
         }
     }
 
@@ -350,7 +384,9 @@ function createDropdown(data) {
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {return a[1] - b[1]})
+        dataSplit.sort(function (a, b) {
+            return a[1] - b[1]
+        })
         let value = parseInt(dataSplit[1]);
         if (value <= 5) {
             let dataSplit = data[i].toString().split(",")
@@ -382,11 +418,15 @@ function deleteValue(data) {
     favGroup.textContent = "favorites";
     favGroup.id = "favDelete"
     deleteSelect.appendChild(favGroup);
-    data.sort(function (a, b) {return b[1] - a[1]})
+    data.sort(function (a, b) {
+        return b[1] - a[1]
+    })
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {return a[1] - b[1]})
+        dataSplit.sort(function (a, b) {
+            return a[1] - b[1]
+        })
         let value = parseInt(dataSplit[1]);
         if (value > 5) {
             let dataSplit = data[i].toString().split(",")
@@ -394,7 +434,7 @@ function deleteValue(data) {
             option.value = dataSplit[0];
             option.text = dataSplit[0];
             option.id = "delete"
-            favGroup.appendChild(option) ;
+            favGroup.appendChild(option);
         }
     }
 
@@ -414,7 +454,9 @@ function deleteValue(data) {
 
     for (var i = 0; i < data.length; i++) {
         let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {return a[1] - b[1]})
+        dataSplit.sort(function (a, b) {
+            return a[1] - b[1]
+        })
         let value = parseInt(dataSplit[1]);
         if (value <= 5) {
             let dataSplit = data[i].toString().split(",")
@@ -435,8 +477,13 @@ function getValue() {
 }
 
 function onSelect() {
-    let value = document.getElementById("You're_welcome_Boris").value
+    let value = document.getElementById("Youre_welcome_Boris").value
     document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.value = value;
+    const trigger = (el, etype, custom) => {
+        const evt = custom ?? new Event(etype, {bubbles: true});
+        el.dispatchEvent(evt);
+    }
+    trigger(document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments, 'change')
 }
 
 function onDeleteSelect() {
