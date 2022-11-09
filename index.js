@@ -7,6 +7,8 @@
 // @author      Alejandro Lüthi
 // @require https://code.jquery.com/jquery-3.2.1.min.js
 // @require http://userscripts-mirror.org/scripts/source/107941.user.js
+// @grant GM_setValue
+// @grant GM_getValue
 // @description 14/09/2022, 14:34:12
 // ==/UserScript==
 $(document).ready(function (elementId) {
