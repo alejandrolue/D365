@@ -11,7 +11,7 @@
 // @grant GM_getValue
 // @description 14/09/2022, 14:34:12
 // ==/UserScript==
-$(document).ready(function (elementId) {
+$(document).ready(function () {
     waitForElm("#PMBITSTimesheetCreate_2_CreateFromFavorites_toggle").then((elm) => {
         const trigger = (el, etype, custom) => {
             const evt = custom ?? new Event(etype, {bubbles: true});
@@ -24,6 +24,7 @@ $(document).ready(function (elementId) {
 $(document).ready(function () {
     waitForElm(".multilineInput-textArea").then((elm) => {
 
+        // getting the values from the localstorage.
         var state = localStorage.getItem('storedData');
         let data = [];
         if (state) {
@@ -31,17 +32,24 @@ $(document).ready(function () {
         } else {
             console.log("");
         }
-
+        // creating select dropdown
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(createDropdown(data));
 
+        // creating delete dropdown
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(deleteValue(data));
 
+        // creating delete all button
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(bigRedButton(data));
 
+        // getting the value from the Textbox
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
             getValue()
         };
 
+        /*
+        * The value is getting checked if its empty or not. If empty nothing happens. If not empty, spaces in front or back of the value gets removed.
+        * Then is getting checked if it's already in the array. If the same value does not exist yet the value get pushed to the localstorage. And the dropdowns get re-rendered.
+        */
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
             if (getValue() === "") {
                 console.log("is empty");
@@ -99,6 +107,7 @@ $(document).ready(function () {
             };
         };
 
+        // When clicked the value goes up by +1. After clicked the dropdown goes back to the default value.
         document.getElementById("Youre_welcome_Boris").onchange = function () {
             onSelect();
             for (var i = 0; i < data.length; i++) {
@@ -113,7 +122,7 @@ $(document).ready(function () {
         }
 
 
-
+        // Gets the deleted value and deletes that value
         document.getElementById("You're_welcome_Janes").onchange = function () {
             onDeleteSelect()
         };
@@ -153,7 +162,6 @@ $(document).ready(function () {
         }
 
         function onDelete() {
-
             let value = document.getElementById("You're_welcome_Janes").value;
             for (var i = 0; data.length > i; i++) {
                 document.getElementById("select").remove();
@@ -479,8 +487,7 @@ function getValue() {
 }
 
 function onSelect() {
-    let value = document.getElementById("Youre_welcome_Boris").value
-    document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.value = value;
+    document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.value = document.getElementById("Youre_welcome_Boris").value;
     const trigger = (el, etype, custom) => {
         const evt = custom ?? new Event(etype, {bubbles: true});
         el.dispatchEvent(evt);
