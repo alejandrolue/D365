@@ -1,28 +1,38 @@
 # Functions
 
-## document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange
-This function is activated when something changed in the Textbox. Then the value is checked if its empty. If not then its checked if it has spaces in front and at the end of the value and gets removed. Then it gets checked if the value is already existing in the Array if not it gets saved in the localstorage and the dropdowns will be re-rendered.
+## waitForElm()
+Waits for the Html element to be shown on the page. So then the script knows when to start the task.
 
-## document.getElementById("bigRedButton").onclick
-When clicked on this button all the data in the localstorge will be deleted. And the dropdowns re-rendered.
+## elementsCreation() 
+Executes the creation of the elements shown on the page.
 
-## onDelete()
-Deletes the selected value.
+## createSelectDropdown()
+Creates the select dropdown
 
-## waitForElm(selector)
-Waits until the element appears. So that the script knows when to execute.
+## createDeleteDropdown()
+Creates the delete dropdown
 
-## creteDropdown(data)
-Creates the select dropdown with the data from the localstorage. The values which got clicked more than five times. Will appear in the favorites section of the dropdown.
-
-## bigRedButton()
-creates the delete all button.
-
-## deleteValue(data)
-Creates the dropdown for the data that should be deleted.
+## createDeleteAllButton()
+creates the delete All button
 
 ## getValue()
-Gets the value from the Textbox.
+Gets the Value from the textbox.
 
-## onDeleteSelect()
-Gets the value that should be deleted.
+## onSelect()
+Simulates a click so the value gets saved by a Post request in the textbox. The value that has been clicked gets increased by +1.
+
+## onDelete()
+Deletes the value that has been clicked.
+
+## renderDeleteFields()
+Sorts the Dropdown. re-renders when a value has been added or deleted.
+
+## deleteAll()
+deletes all data.
+
+## validateValue()
+Validates the input if it already exists in the localstorage. Checks if there are more than 11 values the least used get deleted.
+
+
+
+
