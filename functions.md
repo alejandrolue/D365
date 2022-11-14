@@ -24,7 +24,7 @@ Simulates a click so the value gets saved by a Post request in the textbox. The 
 ## onDelete()
 Deletes the value that has been clicked.
 
-## renderDeleteFields()
+## renderOptions()
 Sorts the Dropdown. re-renders when a value has been added or deleted.
 
 ## deleteAll()
