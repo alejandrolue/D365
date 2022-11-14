@@ -50,8 +50,6 @@ $(document).ready(function () {
     })
 
     waitForElm(".toggle-box").then((elm) => {
-        console.log("hello there")
-
         const id = document.getElementsByClassName("toggle-box")[0].id;
         document.getElementById(id).click();
     })
