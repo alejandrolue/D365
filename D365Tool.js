@@ -76,14 +76,6 @@ function waitForElm(selector) {
     });
 }
 
-function createClickEvent(elementId) {
-    const trigger = (el, etype, custom) => {
-        const evt = custom ?? new Event(etype, {bubbles: true})
-        el.dispatchEvent(evt);
-    }
-    trigger(document.getElementsByClassName(elementId), 'click');
-}
-
 function elementsCreation(data) {
     document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(createSelectDropdown(data));
     document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(createDeleteDropdown(data));
@@ -226,40 +218,6 @@ function getValue() {
     return document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.value
 }
 
-/*function renderSelectFields(data) {
-    for (var i = 0; data.length - 1 > i; i++) {
-        document.getElementById("Select").remove();
-    }
-    const optSelect = document.querySelector("#resentsSelect");
-    const optFav = document.querySelector("#favSelect")
-    data.sort(function (a, b) {
-        return b[1] - a[1]
-    })
-    for (var i = 0; i < data.length - 1; i++) {
-        let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {
-            return a[1] - b[1]
-        })
-        let value = parseInt(dataSplit[1]);
-        if (value <= 5) {
-            let dataSplit = data[i].toString().split(",")
-            option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
-            option.id = "Select"
-            optSelect.appendChild(option)
-        }
-        if (value > 5) {
-            let dataSplit = data[i].toString().split(",")
-            option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
-            option.id = "Select"
-            optFav.appendChild(option)
-        }
-    }
-}*/
-
 function onSelect(data) {
     document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.value = document.getElementById("selectDropdown").value;
     const trigger = (el, etype, custom) => {
@@ -289,12 +247,11 @@ function onDelete(data) {
             console.log(data);
         }
     }
-    renderDeleteFields(data)
+    renderOptions(data)
     return data;
 }
 
-//TODO: Function needs naming change
-function renderDeleteFields(data) {
+function renderOptions(data) {
     let value = document.getElementById("deleteDropdown").value;
     for (var i = 0; data.length >= i; i++) {
         console.log(i + "select")
@@ -467,11 +424,11 @@ function validateValue(data) {
                 }
                 localStorage.setItem('storedData', JSON.stringify(data));
                 //renderSelectFields(data);
-                renderDeleteFields(data);
+                renderOptions(data);
             } else {
                 localStorage.setItem('storedData', JSON.stringify(data));
                 //renderSelectFields(data);
-                renderDeleteFields(data);
+                renderOptions(data);
             }
         }
         matches = false;
