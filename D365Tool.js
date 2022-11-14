@@ -12,17 +12,6 @@
 // @description 14/09/2022, 14:34:12
 // ==/UserScript==
 
-/*
-TODO: Selector needs to be variable. And click event is not working properly
-
-$(document).ready(function () {
-    waitForElm("#PMBITSTimesheetCreate_2_CreateFromFavorites_toggle").then((elm) => {
-        createClickEvent(".toggle-box");
-    })
-})
-*/
-
-
 $(document).ready(function () {
     waitForElm(".multilineInput-textArea").then((elm) => {
         const state = localStorage.getItem('storedData');
@@ -58,6 +47,13 @@ $(document).ready(function () {
         document.getElementById("deleteAll").onclick = function () {
             deleteAll(data)
         }
+    })
+
+    waitForElm(".toggle-box").then((elm) => {
+        console.log("hello there")
+
+        const id = document.getElementsByClassName("toggle-box")[0].id;
+        document.getElementById(id).click();
     })
 })
 
