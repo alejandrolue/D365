@@ -22,8 +22,6 @@ $(document).ready(function () {
             console.log("empty")
         }
 
-        console.log("tes");
-
         elementsCreation(data);
 
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
@@ -100,7 +98,6 @@ function createSelectDropdown(data) {
         dataSplit.sort(function (a, b) {
             return a - b
         })
-        console.log(dataSplit);
         let value = parseInt(dataSplit[1]);
         if (value > 5) {
             let dataSplit = data[i].toString().split(",")
@@ -237,14 +234,10 @@ function onSelect(data) {
 
 function onDelete(data) {
     let value = document.getElementById("deleteDropdown").value;
-    console.log(value);
-    console.log(data[0])
     for (var i = 0; i < data.length; i++) {
         if (data[i][0] === value) {
             data.splice(i, 1);
-            console.log(data)
             localStorage.setItem('storedData', JSON.stringify(data));
-            console.log(data);
         }
     }
     renderOptions(data)
@@ -254,14 +247,13 @@ function onDelete(data) {
 function renderOptions(data) {
     let value = document.getElementById("deleteDropdown").value;
     for (var i = 0; data.length >= i; i++) {
-        console.log(i + "select")
-        if(document.getElementById("Select") !== null) {
+
+        if (document.getElementById("Select") !== null) {
             document.getElementById("Select").remove();
         }
     }
     for (var i = 0; data.length >= i; i++) {
-        console.log(i + "delete")
-        if(document.getElementById("Delete") !== null) {
+        if (document.getElementById("Delete") !== null) {
             document.getElementById("Delete").remove();
         }
     }
@@ -356,13 +348,9 @@ function renderOptions(data) {
 }
 
 function deleteAll(data) {
-    if (data.length !== 0) {
-        console.log("empty")
-    } else {
-        for (var i = 0; data.length > i; i++) {
-            document.getElementById("Select").remove();
-            document.getElementById("Delete").remove();
-        }
+    for (var i = 0; data.length > i; i++) {
+        document.getElementById("Select").remove();
+        document.getElementById("Delete").remove();
     }
 
     for (var i = 0; i < data.length; i++) {
@@ -397,7 +385,6 @@ function validateValue(data) {
         let value = getValue();
         let res = value.replace(/^[ ]+/g, "");
         let short = res.replace(/[ ]+$/g, "");
-        console.log(short)
         let matches = false;
         data.forEach(store => {
             let splitStore = store.toString().split(",")
