@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://dand365prod.operations.dynamics.com/*
 // @grant       none
-// @version     1.4
+// @version     1.4.1
 // @author      Alejandro Lüthi
 // @require https://code.jquery.com/jquery-3.2.1.min.js
 // @require http://userscripts-mirror.org/scripts/source/107941.user.js
@@ -108,8 +108,8 @@ function createSelectDropdown(data) {
         if (value > 5) {
             const rightValue = lastComma(data[i].toString(), ",")
             option = document.createElement("option");
-            option.value = rightValue;
-            option.text = rightValue;
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Select"
             favGroup.appendChild(option);
         }
