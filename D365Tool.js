@@ -90,7 +90,6 @@ function lastComma(str, substring) {
 }
 
 function createSelectDropdown(data) {
-    const copyData = [...data]
     var select = document.createElement("select");
     select.id = "selectDropdown";
 
