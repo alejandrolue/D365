@@ -223,9 +223,7 @@ function onSelect(data) {
         const rightValue = lastComma(data[i].toString(), ",")
         if (rightValue[0] === getValue()) {
             let levelUp = parseInt(rightValue[1]) + 1;
-            console.log(data[i] + " before")
             data[i] = [rightValue[0], levelUp];
-            console.log(data[i] + " after")
             localStorage.setItem('storedData', JSON.stringify(data));
         }
     }
@@ -373,7 +371,6 @@ function validateValue(data) {
         let value = getValue();
         let res = value.replace(/^[ ]+/g, "");
         let short = res.replace(/[ ]+$/g, "");
-        console.log(short)
         let matches = false;
         data.forEach(store => {
             const rightValue = lastComma(store.toString(), ",")
