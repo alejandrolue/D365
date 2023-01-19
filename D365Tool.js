@@ -350,7 +350,6 @@ function renderOptions(data) {
 }
 
 function deleteAll(data) {
-    console.log(data.length)
     if (data.length === 0) {
         console.log("empty")
     } else {
@@ -360,8 +359,6 @@ function deleteAll(data) {
             document.getElementById("Delete").remove();
         }
     }
-
-    console.log(data);
 
     for (var i = 0; i < data.length; i++) {
         data.splice(i, 1);
