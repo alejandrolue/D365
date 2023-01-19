@@ -22,7 +22,7 @@ $(document).ready(function () {
             console.log("empty")
         }
 
-        console.log("test");
+        console.log("tes");
 
         elementsCreation(data);
 
