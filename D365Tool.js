@@ -227,6 +227,7 @@ function onSelect(data) {
             localStorage.setItem('storedData', JSON.stringify(data));
         }
     }
+    renderOptions(data);
 }
 
 function onDelete(data) {
@@ -286,7 +287,6 @@ function renderOptions(data) {
     }
     const optSSelect = document.querySelector("#resentsSelect");
     const optSFav = document.querySelector("#favSelect")
-    //TODO: If there are only numbers in the string it also shown in the favorites tab. Needs fix
     for (var i = 0; i < data.length; i++) {
         const rightValue = lastComma(data[i].toString(), ",")
         let value = parseInt(rightValue[1]);
