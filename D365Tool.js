@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        D365 Script Merkle
+// @name        D365 Script Merkle Develop
 // @namespace   Violentmonkey Scripts
 // @match       https://dand365prod.operations.dynamics.com/*
 // @grant       none
@@ -45,7 +45,9 @@ $(document).ready(function () {
         }
 
         document.getElementById("deleteAll").onclick = function () {
-            deleteAll(data)
+            deleteAll(data);
+            $("#deleteDropdown").on('blur', (e) => (e.target.value = 'Delete'));
+            $("#selectDropdown").on('blur', (e) => (e.target.value = 'Select'));
         }
     })
 
@@ -248,12 +250,12 @@ function renderOptions(data) {
     let value = document.getElementById("deleteDropdown").value;
     for (var i = 0; data.length >= i; i++) {
 
-        if (document.getElementById("Select") !== null) {
+        if(document.getElementById("Select") !== null) {
             document.getElementById("Select").remove();
         }
     }
     for (var i = 0; data.length >= i; i++) {
-        if (document.getElementById("Delete") !== null) {
+        if(document.getElementById("Delete") !== null) {
             document.getElementById("Delete").remove();
         }
     }
@@ -348,10 +350,18 @@ function renderOptions(data) {
 }
 
 function deleteAll(data) {
-    for (var i = 0; data.length > i; i++) {
-        document.getElementById("Select").remove();
-        document.getElementById("Delete").remove();
+    console.log(data.length)
+    if (data.length === 0) {
+        console.log("empty")
+    } else {
+        console.log("in here")
+        for (var i = 0; data.length > i; i++) {
+            document.getElementById("Select").remove();
+            document.getElementById("Delete").remove();
+        }
     }
+
+    console.log(data);
 
     for (var i = 0; i < data.length; i++) {
         data.splice(i, 1);
@@ -385,6 +395,7 @@ function validateValue(data) {
         let value = getValue();
         let res = value.replace(/^[ ]+/g, "");
         let short = res.replace(/[ ]+$/g, "");
+        console.log(short)
         let matches = false;
         data.forEach(store => {
             let splitStore = store.toString().split(",")
