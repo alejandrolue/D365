@@ -82,7 +82,15 @@ function elementsCreation(data) {
     document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.after(createDeleteAllButton())
 }
 
+function lastComma(str, substring) {
+    const lastIndex = str.lastIndexOf(substring)
+    const normal = str.slice(0, lastIndex)
+    const after = str.slice(lastIndex + 1)
+    return [normal, after]
+}
+
 function createSelectDropdown(data) {
+    const copyData = [...data]
     var select = document.createElement("select");
     select.id = "selectDropdown";
 
@@ -96,16 +104,13 @@ function createSelectDropdown(data) {
         return b[1] - a[1]
     })
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",");
-        dataSplit.sort(function (a, b) {
-            return a - b
-        })
-        let value = parseInt(dataSplit[1]);
+        const rightValue = lastComma(data[i].toString(), ",")
+        let value = parseInt(rightValue[1]);
         if (value > 5) {
-            let dataSplit = data[i].toString().split(",")
+            const rightValue = lastComma(data[i].toString(), ",")
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue;
+            option.text = rightValue;
             option.id = "Select"
             favGroup.appendChild(option);
         }
@@ -126,16 +131,12 @@ function createSelectDropdown(data) {
     recentGroup.appendChild(option);
 
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {
-            return a[1] - b[1]
-        })
-        let value = parseInt(dataSplit[1]);
+        const rightValue = lastComma(data[i].toString(), ",")
+        let value = parseInt(rightValue[1]);
         if (value <= 5) {
-            let dataSplit = data[i].toString().split(",")
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Select"
             select.appendChild(option);
         }
@@ -157,16 +158,13 @@ function createDeleteDropdown(data) {
     })
 
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {
-            return a[1] - b[1]
-        })
-        let value = parseInt(dataSplit[1]);
+        const rightValue = lastComma(data[i].toString(), ",")
+        let value = parseInt(rightValue[1]);
         if (value > 5) {
             let dataSplit = data[i].toString().split(",")
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Delete"
             favGroup.appendChild(option);
         }
@@ -187,16 +185,13 @@ function createDeleteDropdown(data) {
     recentGroup.appendChild(option);
 
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        dataSplit.sort(function (a, b) {
-            return a[1] - b[1]
-        })
-        let value = parseInt(dataSplit[1]);
+        const rightValue = lastComma(data[i].toString(), ",")
+        let value = parseInt(rightValue[1]);
         if (value <= 5) {
             let dataSplit = data[i].toString().split(",")
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Delete"
             deleteSelect.appendChild(option);
         }
@@ -225,10 +220,12 @@ function onSelect(data) {
     }
     trigger(document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments, 'change');
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        if (dataSplit[0] === getValue()) {
-            let levelUp = parseInt(dataSplit[1]) + 1;
-            data[i] = [dataSplit[0], levelUp];
+        const rightValue = lastComma(data[i].toString(), ",")
+        if (rightValue[0] === getValue()) {
+            let levelUp = parseInt(rightValue[1]) + 1;
+            console.log(data[i] + " before")
+            data[i] = [rightValue[0], levelUp];
+            console.log(data[i] + " after")
             localStorage.setItem('storedData', JSON.stringify(data));
         }
     }
@@ -250,19 +247,19 @@ function renderOptions(data) {
     let value = document.getElementById("deleteDropdown").value;
     for (var i = 0; data.length >= i; i++) {
 
-        if(document.getElementById("Select") !== null) {
+        if (document.getElementById("Select") !== null) {
             document.getElementById("Select").remove();
         }
     }
     for (var i = 0; data.length >= i; i++) {
-        if(document.getElementById("Delete") !== null) {
+        if (document.getElementById("Delete") !== null) {
             document.getElementById("Delete").remove();
         }
     }
 
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        if (dataSplit[0] === value) {
+        const rightValue = lastComma(data[i].toString(), ",")
+        if (rightValue[0] === value) {
             data.splice(i, 1);
             localStorage.setItem('storedData', JSON.stringify(data));
 
@@ -293,27 +290,19 @@ function renderOptions(data) {
     const optSFav = document.querySelector("#favSelect")
     //TODO: If there are only numbers in the string it also shown in the favorites tab. Needs fix
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        let value = parseInt(dataSplit[1]);
+        const rightValue = lastComma(data[i].toString(), ",")
+        let value = parseInt(rightValue[1]);
         if (value <= 5) {
-            let dataSplit = data[i].toString().split(",")
-            dataSplit.sort(function (a, b) {
-                return a[1] - b[1]
-            })
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Select"
             optSSelect.appendChild(option)
         }
         if (value > 5) {
-            let dataSplit = data[i].toString().split(",")
-            dataSplit.sort(function (a, b) {
-                return a[1] - b[1]
-            })
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Select"
             optSFav.appendChild(option)
         }
@@ -322,27 +311,19 @@ function renderOptions(data) {
     const optDSelect = document.querySelector("#resentsDelete");
     const optDFav = document.querySelector("#favDelete")
     for (var i = 0; i < data.length; i++) {
-        let dataSplit = data[i].toString().split(",")
-        let value = parseInt(dataSplit[1]);
+        const rightValue = lastComma(data[i].toString(), ",")
+        let value = parseInt(rightValue[1]);
         if (value <= 5) {
-            let dataSplit = data[i].toString().split(",")
-            dataSplit.sort(function (a, b) {
-                return a[1] - b[1]
-            })
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Delete"
             optDSelect.appendChild(option)
         }
         if (value > 5) {
-            let dataSplit = data[i].toString().split(",")
-            dataSplit.sort(function (a, b) {
-                return a[1] - b[1]
-            })
             option = document.createElement("option");
-            option.value = dataSplit[0];
-            option.text = dataSplit[0];
+            option.value = rightValue[0];
+            option.text = rightValue[0];
             option.id = "Delete"
             optDFav.appendChild(option)
         }
@@ -395,8 +376,8 @@ function validateValue(data) {
         console.log(short)
         let matches = false;
         data.forEach(store => {
-            let splitStore = store.toString().split(",")
-            if (splitStore[0] === short) {
+            const rightValue = lastComma(store.toString(), ",")
+            if (rightValue[0] === short) {
                 matches = true;
             }
         })
