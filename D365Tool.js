@@ -22,6 +22,8 @@ $(document).ready(function () {
             console.log("empty")
         }
 
+        console.log("test");
+
         elementsCreation(data);
 
         document.getElementsByClassName("multilineInput-textArea").TSTimesheetLineWeek_ExternalComments.onchange = function () {
