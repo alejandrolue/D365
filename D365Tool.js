@@ -3,7 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @match       https://dand365prod.operations.dynamics.com/*
 // @grant       none
-// @version     1.4.1
+// @version     1.4.2
 // @author      Alejandro Lüthi
 // @require https://code.jquery.com/jquery-3.2.1.min.js
 // @require http://userscripts-mirror.org/scripts/source/107941.user.js
@@ -116,9 +116,9 @@ function createSelectDropdown(data) {
     }
 
     var recentGroup = document.createElement("optgroup");
-    recentGroup.setAttribute("label", "resents")
-    recentGroup.textContent = "resents";
-    recentGroup.id = "resentsSelect"
+    recentGroup.setAttribute("label", "recent")
+    recentGroup.textContent = "recent";
+    recentGroup.id = "recentSelect"
     select.appendChild(recentGroup);
 
 
@@ -170,9 +170,9 @@ function createDeleteDropdown(data) {
     }
 
     var recentGroup = document.createElement("optgroup");
-    recentGroup.setAttribute("label", "resents")
-    recentGroup.textContent = "resents";
-    recentGroup.id = "resentsDelete"
+    recentGroup.setAttribute("label", "recent")
+    recentGroup.textContent = "recent";
+    recentGroup.id = "recentDelete"
     deleteSelect.appendChild(recentGroup);
 
 
@@ -284,7 +284,7 @@ function renderOptions(data) {
             break;
         }
     }
-    const optSSelect = document.querySelector("#resentsSelect");
+    const optSSelect = document.querySelector("#recentSelect");
     const optSFav = document.querySelector("#favSelect")
     for (var i = 0; i < data.length; i++) {
         const rightValue = lastComma(data[i].toString(), ",")
@@ -305,7 +305,7 @@ function renderOptions(data) {
         }
     }
 
-    const optDSelect = document.querySelector("#resentsDelete");
+    const optDSelect = document.querySelector("#recentDelete");
     const optDFav = document.querySelector("#favDelete")
     for (var i = 0; i < data.length; i++) {
         const rightValue = lastComma(data[i].toString(), ",")
