@@ -5,6 +5,9 @@
 3. Then you click on the violentmonkey icon. And go the setting.![extension](./images/extension.png)
 4. On the violentmonkey page. Click on the plus icon and then add from url. Then you go to the github repository and choose the file and open it raw and copy that url and past it on the violentmonkey page. ![url/violentmonkey](./images/url.png) 
 And Paste this url: https://raw.githubusercontent.com/alejandrolue/D365/main/D365Tool.js
+## Updating the Script.
+If there is a new Version of the script. You are able to update it in the settings by simply clicking the refresh icon. Then the script should be running the newest version.
+![update violentmonkey](./images/update.png)
 
 
 
